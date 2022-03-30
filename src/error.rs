@@ -6,6 +6,9 @@ use solana_program::program_error::ProgramError;
 pub enum EscrowError {
     #[error("Invalid Instruction")]
     InvalidInstruction,
+
+    #[error("Not Rent Exempt")]
+    NotRentExempt,
 }
 
 impl From<EscrowError> for ProgramError {
