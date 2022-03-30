@@ -3,7 +3,7 @@ use solana_program::{
     entrypoint::ProgramResult,
     program_error::ProgramError,
     msg,
-    pubkey:PubKey,
+    pubkey::PubKey,
     program_pack::{Pack, IsInitialized},
     sysvar::{rent::Rent, Sysvar},
     program::invoke,
@@ -76,7 +76,7 @@ impl Processor {
 
         msg!("Calling the token program to transfer token account ownership...");
         invoke(
-            $owner_change_ix,
+            &owner_change_ix,
             &[
                 temp_token_account.clone(),
                 initializer.clone(),
