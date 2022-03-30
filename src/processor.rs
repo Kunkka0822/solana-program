@@ -13,7 +13,7 @@ use crate::{instruction::EscrowInstruction, error::EscrowError, state::Escrow};
 
 pub struct Processor;
 impl Processor {
-    pub fn process(program_id: &PubKey, accounts: &[AccountInfo], instruction_data: &[u8]) -> ProgramResult {
+    pub fn process(program_id: &Pubkey, accounts: &[AccountInfo], instruction_data: &[u8]) -> ProgramResult {
         let instruction = EscrowInstruction::unpack(instruction_data)?;
 
         match instruction {
@@ -27,7 +27,7 @@ impl Processor {
     fn process_init_escrow(
         accounts: &[AccountInfo],
         amount: u64,
-        program_id: &PubKey,
+        program_id: &Pubkey,
     ) -> ProgramResult {
         let account_info_iter = &mut accounts.iter();
         let initializer = next_account_info(account_info_iter)?;
@@ -62,7 +62,7 @@ impl Processor {
         escrow_info.expected_amount = amount;
 
         Escrow::pack(escrow_info, &mut escrow_account.try_borrow_mut_data()?)?;
-        let (pda, _bump_seed) = PubKey::find_program_address(&[b"escrow"], program_id);
+        let (pda, _bump_seed) = Pubkey::find_program_address(&[b"escrow"], program_id);
 
         let token_program = next_account_info(account_info_iter)?;
         let owner_change_ix = spl_token::instruction::set_authority(
