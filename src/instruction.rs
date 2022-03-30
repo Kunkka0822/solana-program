@@ -17,7 +17,7 @@ impl EscrowInstruction {
             0 => Self::InitEscrow {
                 amount: Self::unpack_amount(rest)?,
             },
-            _ => return Err(InvalidInstruction.into());
+            _ => return Err(InvalidInstruction.into()),
         })
     }
 

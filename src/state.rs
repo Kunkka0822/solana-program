@@ -25,7 +25,7 @@ impl IsInitialized for Escrow {
 impl Pack for Escrow {
     const LEN: usize = 105;
     fn unpack_from_slice(src: &[u8]) -> Result<Self, ProgramError> {
-        let src = array_ref![src, 0. Escrow::LEN];
+        let src = array_ref![src, 0, Escrow::LEN];
         let (
             is_initialized,
             initializer_pubkey,
@@ -70,6 +70,6 @@ impl Pack for Escrow {
         initializer_pubkey_dst.copy_from_slice(initializer_pubkey.as_ref());
         temp_token_account_pubkey_dst.copy_from_slice(temp_token_account_pubkey.as_ref());
         initializer_token_to_receive_account_pubkey.copy_from_slice(initializer_token_to_receive_account_pubkey.as_ref());
-        *expected_acmount_dst = expected_amount.to_le_bytes();
+        *expected_amount_dst = expected_amount.to_le_bytes();
     }
 }
