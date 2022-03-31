@@ -9,6 +9,8 @@ use solana_program::{
     program::invoke,
 };
 
+use spl_token::state::Account as TokenAccount;
+
 use crate::{instruction::EscrowInstruction, error::EscrowError, state::Escrow};
 
 pub struct Processor;
@@ -113,7 +115,7 @@ impl Processor {
         let (pda, bump_seed) = Pubkey::find_program_address(&[b"escrow"], program_id);
 
         if amount_expected_by_taker != pdas_temp_toekn_account_info.amount {
-            retrn Err(EscrowError::ExpectedAmountMismatch.into());
+            return Err(EscrowError::ExpectedAmountMismatch.into());
         }
 
         let initializers_main_account = next_account_info(account_info_iter);               //4
