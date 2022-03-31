@@ -6,7 +6,7 @@ use solana_program::{
     pubkey::Pubkey,
     program_pack::{Pack, IsInitialized},
     sysvar::{rent::Rent, Sysvar},
-    program::invoke,
+    program::{invoke, invoke_signed},
 };
 
 use spl_token::state::Account as TokenAccount;
@@ -173,7 +173,7 @@ impl Processor {
             &[
                 pdas_temp_token_account.clone(),
                 takers_token_to_receive_account.clone(),
-                pdas_account.clone(),
+                pda_account.clone(),
                 token_program.clone(),
             ],
             &[&[&b"escrow"[..], &[bump_seed]]],
@@ -181,7 +181,7 @@ impl Processor {
 
         let close_pdas_temp_acc_ix = spl_token::instruction::close_account(
             token_program.key,
-            pdas_temp_token_account.key
+            pdas_temp_token_account.key,
             initializers_main_account.key, 
             &pda, 
             &[&pda]
