@@ -105,11 +105,11 @@ impl Processor {
             return Err(ProgramError::MissingRequiredSignature);
         }
 
-        let takers_sending_token_account = next_account_info(account_info_iter);        //1
+        let takers_sending_token_account = next_account_info(account_info_iter)?;        //1
 
-        let takers_token_to_receive_account = next_account_info(account_info_iter);     //2
+        let takers_token_to_receive_account = next_account_info(account_info_iter)?;     //2
 
-        let pdas_temp_token_account = next_account_info(account_info_iter);             //3
+        let pdas_temp_token_account = next_account_info(account_info_iter)?;             //3
         let pdas_temp_toekn_account_info = 
             TokenAccount::unpack(&pdas_temp_token_account.try_borrow_data()?)?;
         let (pda, bump_seed) = Pubkey::find_program_address(&[b"escrow"], program_id);
@@ -118,9 +118,9 @@ impl Processor {
             return Err(EscrowError::ExpectedAmountMismatch.into());
         }
 
-        let initializers_main_account = next_account_info(account_info_iter);               //4
-        let initializers_token_to_receive_account = next_account_info(account_info_iter);   //5
-        let escrow_account = next_account_info(account_info_iter);                          //6
+        let initializers_main_account = next_account_info(account_info_iter)?;               //4
+        let initializers_token_to_receive_account = next_account_info(account_info_iter)?;   //5
+        let escrow_account = next_account_info(account_info_iter)?;                          //6
 
         let escrow_info = Escrow::unpack(&escrow_account.try_borrow_data()?)?;
 
@@ -136,7 +136,7 @@ impl Processor {
             return Err(ProgramError::InvalidAccountData);
         }
 
-        let token_program = next_account_info(account_info_iter);                               //7
+        let token_program = next_account_info(account_info_iter)?;                               //7
 
         let transfer_to_initializer_ix = spl_token::instruction::transfer(
             token_program.key,
@@ -145,7 +145,7 @@ impl Processor {
             taker.key,
             &[&taker.key],
             escrow_info.expected_amount,
-        );
+        )?;
         msg!("Calling the token program to transfer tokens to the escrow's initializer...");
         invoke(
             &transfer_to_initializer_ix,
